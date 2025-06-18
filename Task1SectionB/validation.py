@@ -8,11 +8,6 @@ print(df.head())
 
 
 
-
-
-
-
-
 def validation(df):
 
 
@@ -23,7 +18,6 @@ def validation(df):
     df = df.drop_duplicates(subset=['timestamp'])#- א" שיקרה 2 דברים באותו תאריך מחיקת כפילויות
 
 
-    
 
 
 
