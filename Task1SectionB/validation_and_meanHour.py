@@ -10,7 +10,7 @@ def validation(df):
     x = df["value"].mean()# מילוי הערכים החסרים בממוצע
     df.fillna({"value": x}, inplace=True)
     df = df.drop_duplicates(subset=['timestamp'])#- א" שיקרה 2 דברים באותו תאריך מחיקת כפילויות
-    print(df)
+    return df
 
 
 def MeanHourDay(df):
@@ -19,7 +19,8 @@ def MeanHourDay(df):
     # חישוב ממוצע לפי שעה
     result = new_df.groupby('start_time')['value'].mean().reset_index()
     result.columns = ['start time', 'average']
-    print(result)
+    return result
+    # print(result)
 
 
 
