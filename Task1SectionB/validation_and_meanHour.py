@@ -15,7 +15,7 @@ def validation(df):
 
 def MeanHourDay(df):
     new_df = df.copy()
-    new_df['start_time'] = new_df['timestamp'].dt.floor('H')  # לדוגמה: 2025-06-10 06:43 ➝ 2025-06-10 06:00
+    new_df['start_time'] = new_df['timestamp'].dt.floor('h')  # לדוגמה: 2025-06-10 06:43 ➝ 2025-06-10 06:00
     # חישוב ממוצע לפי שעה
     result = new_df.groupby('start_time')['value'].mean().reset_index()
     result.columns = ['start time', 'average']
