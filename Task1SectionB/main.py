@@ -11,7 +11,11 @@ import time
 #     print(toyota_chunk.head())
 
 #parquet לניקוי נתונים אני משתמשת בסיומת 
-df = pd.read_parquet("time_series.parquet")
+# df = pd.read_parquet("time_series.parquet")
+
+df = pd.read_csv("time_series.csv")
+
+
 # start= time.time()
 # print(validation(df))
 # print(MeanHourDay(df))
