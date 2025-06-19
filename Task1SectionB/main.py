@@ -13,7 +13,7 @@ import time
 #parquet לניקוי נתונים אני משתמשת בסיומת 
 # df = pd.read_parquet("time_series.parquet")
 
-df = pd.read_csv("time_series.csv")
+# df = pd.read_csv("time_series.csv")
 
 
 # start= time.time()
@@ -25,8 +25,10 @@ df = pd.read_csv("time_series.csv")
 
 if __name__ == "__main__":
     start= time.time()
-    df=validation(df)
-    file_paths=SpliteCSVFile(df)
+    # df=validation(df)
+    file_path="time_series.csv"
+    file_paths=SpliteCSVFileByChunks(file_path, chunksize=10000)
+
     final_df=ProssecessReadFile(file_paths)
     print(final_df)
     end= time.time()

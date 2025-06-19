@@ -4,14 +4,25 @@ import pandas as pd
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from validation_and_meanHour import *
 
-def SpliteCSVFile(df):
+def SpliteCSVFileByChunks(file_path, chunksize=10000):
     os.makedirs("daily_chunks", exist_ok=True)
-    file_paths = []  # שלב 1: רשימה ריקה לשמירת הנתיבים
+    file_paths = set()  # שימוש בסט כדי למנוע כפילויות
+
+    # file_paths = []  # שלב 1: רשימה ריקה לשמירת הנתיבים
+    for chunk in pd.read_csv(file_path,
+    chunksize=chunksize,
+    parse_dates=['timestamp'],
+    date_format="%m/%d/%Y %H:%M"):
+        validation(chunk)
+
 # חלוקה לפי יום ושמירה לכל קובץ
-    for day, group in df.groupby(df['timestamp'].dt.date):
-        file_name = f"daily_chunks/data_{day}.csv"
-        group.to_csv(file_name, index=False)
-        file_paths.append(file_name)
+        for day, group in chunk.groupby(chunk['timestamp'].dt.date):
+            file_name = f"daily_chunks/data_{day}.csv"
+            write_mode = 'a' if os.path.exists(file_name) else 'w'
+            header = not os.path.exists(file_name)
+            group.to_csv(file_name, index=False, mode=write_mode, header=header)
+
+            file_paths.add(file_name)
     return file_paths
 
 
