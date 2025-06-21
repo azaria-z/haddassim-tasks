@@ -42,10 +42,6 @@ cursor = conn.cursor()
 
 cursor.execute("DROP VIEW IF EXISTS Family_Relations")
 
-#יש בילבול בין האבא לאמא
-
-
-# יש לקצר את הטבלה הזו
 cursor.execute(''' 
                CREATE VIEW Family_Relations AS
                 -- אב
@@ -58,50 +54,101 @@ cursor.execute('''
                 FROM People
                 WHERE Mother_Id IS NOT NULL
                UNION ALL
+               --בן או בת זוג
                 SELECT
                     Person_Id,
                     Spouse_Id AS Relative_Id,
                     CASE
-                        WHEN gender = 'Male' THEN 'wife'
-                        ELSE 'husband'
+                        WHEN gender = 'Male' THEN 'husband'
+                        ELSE 'wife'
                     END AS Connection_Type
                 FROM People
                 WHERE Spouse_Id IS NOT NULL
+               --בן או בת
                 UNION ALL
-                -- בן / בת
-                SELECT
-                    p2.Person_Id AS Person_Id,
-                    p1.Person_Id AS Relative_Id,
+                SELECT P1.Person_Id,
+                P2.Person_Id AS Relative_Id,
                     CASE
-                        WHEN p1.gender = 'Male' THEN 'son'
+                        WHEN P2.gender = 'Male' THEN 'son'
                         ELSE 'daughter'
                     END AS Connection_Type
-                FROM People p1
-                JOIN People p2 ON p1.Father_Id = p2.Person_Id OR p1.Mother_Id = p2.Person_Id
+                FROM People P1 join People P2
+                on (P2.Father_Id=P1.Person_Id OR P2.Mother_Id=P1.Person_Id)
+                --אח אחות
                 UNION ALL
-                -- אח / אחות
-                SELECT
-                    p1.Person_Id,
-                    p2.Person_Id AS Relative_Id,
+                SELECT P1.Person_Id,
+                P2.Person_Id AS Relative_Id,
                     CASE
-                        WHEN p2.gender = 'Male' THEN 'brother'
+                        WHEN P2.gender = 'Male' THEN 'brother'
                         ELSE 'sister'
                     END AS Connection_Type
-                FROM People p1
-                JOIN People p2 ON (
-                    p1.Person_Id != p2.Person_Id AND
+                FROM People P1 join People P2
+                on  p1.Person_Id != p2.Person_Id AND
                     (
-                        (p1.Father_Id IS NOT NULL AND p1.Father_Id = p2.Father_Id) OR
-                        (p1.Mother_Id IS NOT NULL AND p1.Mother_Id = p2.Mother_Id)
-                    )
-                );
-
+                        p1.Father_Id = p2.Father_Id OR p1.Mother_Id = p2.Mother_Id
+                    );
                 ''')
+
 
 
 df = pd.read_sql_query("SELECT * FROM Family_Relations", conn)
 print("\nView: Family_Relations\n")
 print(df.to_string(index=False))
+
+conn.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
