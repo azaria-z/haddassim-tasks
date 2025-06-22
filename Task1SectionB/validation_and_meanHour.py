@@ -4,6 +4,7 @@ import pandas as pd
 # הפונקציות של סעיף א
 
 def validation(df):
+    df = df.copy()  # מונע SettingWithCopyWarning
     df['timestamp'] = pd.to_datetime(df['timestamp'], format='mixed',errors='coerce')# תיקון הפורמט של המחרוזות
     df.dropna(subset=['timestamp'], inplace=True)# מחיקת השורות שאין להן תאריך
     df["value"] = pd.to_numeric(df["value"], errors='coerce')#המרה למספרים נומרים

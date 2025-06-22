@@ -3,18 +3,18 @@ import os
 import pandas as pd
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from validation_and_meanHour import *
+from OpenFile import *
 
 def SpliteCSVFileByChunks(file_path, chunksize=10000):
     os.makedirs("daily_chunks", exist_ok=True)
     file_paths = set()  # שימוש בסט כדי למנוע כפילויות
 
-    # file_paths = []  # שלב 1: רשימה ריקה לשמירת הנתיבים
-    for chunk in pd.read_csv(file_path,
-    chunksize=chunksize,
-    parse_dates=['timestamp'],
-    date_format="%m/%d/%Y %H:%M"):
-        validation(chunk)
 
+    # file_paths = []  # שלב 1: רשימה ריקה לשמירת הנתיבים
+    reader=Open_With_Chunk(file_path,chunksize)
+    for chunk in reader:
+        chunk=validation(chunk)
+        
 # חלוקה לפי יום ושמירה לכל קובץ
         for day, group in chunk.groupby(chunk['timestamp'].dt.date):
             file_name = f"daily_chunks/data_{day}.csv"
@@ -45,6 +45,9 @@ def ProssecessReadFile(file_paths):
      return final_df
 
 
+
+# פונקציה זו מחלקת לפי הזמנים ביום
+# כל תהליכון עושה את הפונקציה הזו
 def MeanHour(file_path):
     try:
     #    print(f"Processing {file_path}")
