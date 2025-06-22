@@ -23,13 +23,17 @@ import time
 if __name__ == "__main__":
     start= time.time()
     # df=validation(df)
-    file_path="time_series.parquet"
+    file_path="time_series.csv"
     file_paths=SpliteCSVFileByChunks(file_path, chunksize=10000)
 
     final_df=ProssecessReadFile(file_paths)
     print(final_df)
     end= time.time()
     print(end-start)
+
+
+# df = pd.read_parquet("time_series.parquet")
+# print(df.head())
 
 
 
