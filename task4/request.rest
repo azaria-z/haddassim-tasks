@@ -1,0 +1,17 @@
+GET http://localhost:3000/posts
+
+###
+
+Send Request
+
+POST http://localhost:3000/api/Product/
+
+Content-Type: application/json
+
+{
+
+"username":
+
+"Kyle"
+
+}
