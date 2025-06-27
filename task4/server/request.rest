@@ -1,0 +1,32 @@
+
+POST http://localhost:3000/api/Users/Sign_up HTTP/1.1
+content-type: application/json
+
+{
+  "username": "greenSupplier",
+  "email": "green@example.com",
+  "password": "securePass2024",
+  "role": "supplier",
+  "phone": "0529876543",
+  "supplierInfo": {
+    "companyName": "Green Market Ltd",
+    "products": [
+      { "name": "Organic Apples", "price": 5.99,"minAmount": 10 },
+      { "name": "Almond Milk", "price": 9.5 ,"minAmount": 10}
+    ]
+  }
+}
+
+###
+
+POST http://localhost:3000/api/Users/login HTTP/1.2
+
+content-type: application/json
+
+{
+  "email": "green@example.com",
+  "password": "securePass2024",
+
+ }
+
+
