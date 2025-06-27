@@ -1,0 +1,76 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg-info/
+*.egg
+.env
+.venv/
+venv/
+ENV/
+env/
+pip-log.txt
+.pytest_cache/
+.coverage
+.tox/
+.mypy_cache/
+.dmypy.json
+.pyre/
+
+# === C# / .NET ===
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vscode/
+*.log
+
+# === SQL scripts (if generated output exists) ===
+*.bak
+*.sqlproj.user
+*.mdf
+*.ldf
+
+# === Node.js / React ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+dist/
+build/
+.cache/
+.next/
+out/
+.vite/
+*.local
+
+# === Environment ===
+.env
+.env.*
+!.env.example
+
+# === OS / Editor garbage ===
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+*.iml
+
+# === Logs ===
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# === Others ===
+coverage/
+tmp/
+temp/
