@@ -6,14 +6,20 @@ dotenv.config();
 
 function auth(requiredRoles = []) {
   return (req, res, next) => {
+    
     const authHeader = req.headers.authorization;
+    console.log("Authorization Header:", authHeader);
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ msg: 'No token provided' });
     }
 
     const token = authHeader.split(' ')[1];
+    console.log("Token received:", token);
+
     try {
       const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      console.log("Decoded token:", decoded);
       req.user = decoded;
 
       // אם requiredRoles ריק – כולם יכולים
@@ -24,6 +30,7 @@ function auth(requiredRoles = []) {
       }
     } 
     catch (err) {
+      console.error("Token verify error:", err.message);
       return res.status(401).json({ msg: 'Invalid token' });
     }
   };

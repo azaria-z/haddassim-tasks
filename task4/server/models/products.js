@@ -7,7 +7,7 @@ const Schema = new mongoose.Schema({
   //   required: true,
   //   unique: true
   // },
-  Name: {
+  name: {
     type: String,
     required: true
   },
@@ -15,14 +15,14 @@ const Schema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  MinAmount: {
+  minAmount: {
     type: Number,
     required: true
   },
      supplier: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 
 
-}, { timestamps: true });
+});
 
 
 

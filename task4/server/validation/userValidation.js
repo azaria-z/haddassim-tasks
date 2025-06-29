@@ -16,7 +16,7 @@ const registerUserValidation = Joi.object({
         Joi.object({
           name: Joi.string().required(),
           price: Joi.number().positive().required(),
-          minAmount: Joi.number().min(0).required() 
+          minAmount: Joi.number().min(1).required() 
         })
       ).min(1).required()
     }).required(),

@@ -1,15 +1,14 @@
 const express = require('express');
 const router = express.Router();
-
+const auth= require("../middleware/verifyJWT")
 const {allProduct,productsOfSupplier,addProduct,searchProduct}=require("../controllers/productController")
+const validate=require("../middleware/validate")
+const validProduct= require("../validation/productValidation")
 
-
-
-// GET / - מחזיר את כל המוצרים
-router.get('/', allProduct);
-router.get('/:supplierName',productsOfSupplier);
-router.get('/products', searchProduct);
-router.post('/', addProduct);
+router.get('/',auth(['admin']), allProduct);
+router.get('/supplier/:supplierId',auth(['admin']),productsOfSupplier);
+router.get('/products',auth(['admin']), searchProduct);
+router.post('/',auth(['supplier']),validate(validProduct), addProduct);
 
 
 

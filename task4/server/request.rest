@@ -1,4 +1,4 @@
-
+#הרשמה
 POST http://localhost:3000/api/Users/Sign_up HTTP/1.1
 content-type: application/json
 
@@ -18,7 +18,7 @@ content-type: application/json
 }
 
 ###
-
+#התחברות
 POST http://localhost:3000/api/Users/login HTTP/1.2
 
 content-type: application/json
@@ -29,4 +29,72 @@ content-type: application/json
 
  }
 
+###
+#קבלת כל המוצרים
+GET http://localhost:3000/api/Product HTTP/1.2
 
+###
+# קבלת מוצרים לפי ספק
+GET http://localhost:3000/api/Product/upplier/:supplierName HTTP/1.2
+
+
+
+###
+#חיפשו מוצר
+GET http://localhost:3000/api/Product/products HTTP/1.2
+
+###
+#הוספת מוצר
+POST http://localhost:3000/api/Product HTTP/1.2
+
+content-type: application/json
+
+{
+  "name": "Milk 3%",
+  "price": 5.9,
+  "minAmount": 10,
+ }
+
+###
+#חיפוש ספק ע"י שם
+GET http://localhost:3000/api/suppliers/find?name=green
+
+
+###
+# קבלת כל ההזמנות (admin בלבד)
+GET http://localhost:3000/api/Order/
+
+###
+
+#  קבלת הזמנות לפי ספק (admin בלבד)
+GET http://localhost:3000/api/Order/supplier
+
+###
+
+#הזמנות
+#  קבלת הזמנות שהושלמו (admin בלבד)
+GET http://localhost:3000/api/Order/completed
+
+###
+
+# יצירת הזמנה חדשה (admin בלבד)
+POST http://localhost:3000/api/Order/new
+Content-Type: application/json
+
+{
+  "product": "Example Product",
+  "supplierId": "s12345",
+  "quantity": 5,
+  "price": 100,
+  "status": "ordered"
+}
+
+###
+
+# שינוי סטטוס של הזמנה (admin/supplier)
+POST http://localhost:3000/api/Order/status/processing
+Content-Type: application/json
+
+{
+  "orderId": "o98765"
+}

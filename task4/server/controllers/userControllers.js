@@ -12,6 +12,12 @@ const sign_up= async (req, res) => {
 
     const { username,email, password, phone ,role,supplierInfo  } = req.validatedBody;
     console.log("Body:", req.validatedBody);
+    if (role === 'admin') {
+      const existingAdmin = await UserModel.findOne({ role: 'admin' });
+      if (existingAdmin) {
+        return res.status(400).json({ msg: "An admin already exists in the system" });
+      }
+    }
 
     // בדיקה אם המשתמש כבר קיים
     // אני בודקת לפי המייל שזה מזהה ייחודי
@@ -68,7 +74,7 @@ const sign_up= async (req, res) => {
 
 const login= async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.validatedBody;
     // חיפוש המשתמש במסד לפי שם משתמש
     const user = await UserModel.findOne({ email});
     if (!user) {
@@ -78,7 +84,7 @@ const login= async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (isMatch) {
-      const accessToken = jwt.sign({id:user.__id,role: user.role},process.env.ACCESS_TOKEN_SECRET,{expiresIn:"15s"})
+      const accessToken = jwt.sign({id:user._id,role: user.role},process.env.ACCESS_TOKEN_SECRET,{expiresIn:"10m"})
       const refreshToken = jwt.sign({ id: user._id },process.env.REFRESH_TOKEN_SECRET,{ expiresIn: '24d' });
 
         // שליחת עוגיה עם טוקן הריענון

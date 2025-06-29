@@ -1,46 +1,41 @@
-// יצירת ספק
+const User = require("../models/users")
 
-// const newSupplier = new Supplier({
-//   user: user._id, // מקשר למשתמש שנוצר קודם
-//   companyName: req.body.companyName,
-//   representativeName: req.body.representativeName,
-//   phone: req.body.phone,
-// });
-// await newSupplier.save();
 
-// const createSupplier = async (userId, supplierData) => {
-//   const supplier = new SupplierModel({
-//     userId,
-//     companyName: supplierData.companyName,
-//     phone: supplierData.phone,
-//     address: supplierData.address,
-//     // שדות נוספים
-//   });
-//   return await supplier.save();
-// };
-const SupplierModel = require('../models/suppliers');
-const createSupplier = async (req, res) => {
+const allSupplier= async (req, res) => {
   try {
-    const { userId, companyName, phone, address } = req.body;
-
-    if (!userId || !companyName) {
-      return res.status(400).json({ msg: "Missing supplier fields" });
-    }
-
-    const supplier = new SupplierModel({
-      userId,
-      companyName,
-      phone,
-      address
-    });
-
-    await supplier.save();
-    res.status(201).json({ msg: "Supplier details saved successfully" });
-
+    const data = await User.find({ role: 'supplier'},'username companyName phone');  // מחזיר את כל המסמכים בטבלה
+    console.log("Retrieved data:", data)
+    res.status(200).send(data); // שולח את הנתונים עם סטטוס 200
   } catch (err) {
-    console.error("Error saving supplier:", err);
-    res.status(500).json({ msg: "Internal server error" });
+    res.status(500).json({ message: 'Error fetching suppliers', error: err.message });
   }
 };
 
-module.exports={createSupplier}
+
+//חיפוש  ספק לפי שם
+// יכול להיות כמה ספקים באותו שם
+// GET /suppliers/find?name=green
+
+const findSupplierByName = async (req, res) => {
+  try {
+    const supplierName = req.query.name;
+
+    if (!supplierName) {
+      return res.status(400).json({ message: 'Missing supplier name in query' });
+    }
+
+    // חיפוש כל המשתמשים שהם ספקים (role: 'supplier') ושם המשתמש שלהם תואם
+    const result = await User.find({
+      role: 'supplier',
+      username: { $regex: supplierName, $options: 'i' }} ,'username companyName phone');
+
+    res.status(200).json(result);
+  } catch (err) {
+    console.error("Error finding supplier:", err);
+    res.status(500).json({ message: 'Error fetching suppliers', error: err.message });
+  }
+};
+
+
+
+module.exports={allSupplier,findSupplierByName}

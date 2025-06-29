@@ -3,6 +3,8 @@ const {routeInit}=require("./routes/config_route");
 const dotenv = require('dotenv');
 const cors = require("cors");
 
+const cookieParser = require('cookie-parser');
+
 
 dotenv.config();
 
@@ -11,8 +13,10 @@ const app = express();
 const port =  process.env.PORT;
 
 
-// app.use(cors());
-
+app.use(cors({
+  origin:true ,  // לשים את המקור המתאים
+  credentials: true                         // חשוב! מאפשר שליחת עוגיות
+}));app.use(cookieParser());
 app.use(express.json())
 routeInit(app);
  

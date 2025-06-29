@@ -11,17 +11,32 @@ const Schema = new mongoose.Schema({
     type: String,
     required: true
   },
- products: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
+products: [
+  {
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+      required: true
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: 1
+    }
+  }
+],
+  totalPrice: {
+    type: Number,
     required: true
-  }],
+  },
+
 
     status: {
     type: String,
-    default: "pending",
+    default: "ordered",
     required: true
   },
+
     supplier: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Supplier', 
