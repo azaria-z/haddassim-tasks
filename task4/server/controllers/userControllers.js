@@ -78,13 +78,13 @@ const login= async (req, res) => {
     // חיפוש המשתמש במסד לפי שם משתמש
     const user = await UserModel.findOne({ email});
     if (!user) {
-      return res.status(400).send('auth fail');
+      return res.status(400).json('auth fail');
     }
     // השוואת סיסמה מוצפנת
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (isMatch) {
-      const accessToken = jwt.sign({id:user._id,role: user.role},process.env.ACCESS_TOKEN_SECRET,{expiresIn:"10m"})
+      const accessToken = jwt.sign({id:user._id,role: user.role},process.env.ACCESS_TOKEN_SECRET,{expiresIn:"10h"})
       const refreshToken = jwt.sign({ id: user._id },process.env.REFRESH_TOKEN_SECRET,{ expiresIn: '24d' });
 
         // שליחת עוגיה עם טוקן הריענון
@@ -98,18 +98,27 @@ const login= async (req, res) => {
       // שמירה במסד הנתונים
       user.refreshToken = refreshToken;
       await user.save();
-      res.json({ msg: 'Success', accessToken, refreshToken });
-    } 
-
-  else {
-      res.status(401).send('auth fail');
-    }
+    // res.json({ msg: 'Success', accessToken, refreshToken, user: {
+    //   id: user._id,
+    //   name: user.name,
+    //   email: user.email,
+    //   role: user.role
+    // }});
+    res.json({user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+    }} )
+  } else {
+    res.status(401).json('auth fail');
+  }
 
   } 
   
   catch (err) {
     console.error("Login error:", err);
-    res.status(500).send('Internal Server Error');
+    res.status(500).json('Internal Server Error');
   }
 };
 

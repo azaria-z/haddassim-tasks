@@ -12,4 +12,4 @@ router.get('/', auth(['admin']),getOrders);
 router.get('/supplier/:supplierId', auth(['admin']),getOrdersOfSupplier);
 router.get('/completed', auth(['admin']),getCompletedOrders);
 router.post('/new', auth(['admin']),validate(validOrder),newOrder);
-router.post('/status/:orderId', auth(['admin','supplier']),OrderStatuse);
+router.put('/status/:status/order/:orderId', auth(['admin','supplier']),OrderStatuse);//יש לשנות הפונקציה המקורית
